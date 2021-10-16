@@ -12,7 +12,7 @@ class Service(models.Model):
 class Appointment(models.Model):
     user = models.ForeignKey(User, on_delete=CASCADE)
     doctor = models.ForeignKey(User, on_delete=CASCADE, related_name="doctor")
-    appointment_at = models.DateTimeField()
+    appointment_on = models.DateTimeField()
     status = models.CharField(default="pending", max_length=255)
     service = models.ForeignKey(Service, on_delete=CASCADE)
     description = models.CharField(default=None, max_length=255)
