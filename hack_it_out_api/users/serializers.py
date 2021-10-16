@@ -1,25 +1,25 @@
 from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
-from .models import CustomUser
+from .models import StaffSchedule, User
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.password_validation import validate_password
 
 class UserDetailSerializer(ModelSerializer):
 
     class Meta:
-        model = CustomUser
+        model = User
         fields = ('id', 'email', 'name', 'address')
     
 class UserRegisterSerializer(ModelSerializer):
        
     class Meta:
-        model = CustomUser
+        model = User
         fields = ('id', 'email', 'name', 'address', 'password')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        user = CustomUser(
+        user = User(
             email=validated_data['email'],
             name=validated_data['name'],
             address=validated_data['address']
@@ -33,7 +33,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
     old_password = serializers.CharField(write_only=True, required=True)
 
     class Meta:
-        model = CustomUser
+        model = User
         fields = ('password', 'old_password')
 
     def validate_old_password(self, value):
@@ -50,3 +50,8 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         return instance 
 
 
+class GetSchedule(ModelSerializer):
+    class Meta:
+        model = StaffSchedule
+        fields = ('id', 'user', "user_from", "user_to")
+    
