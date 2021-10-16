@@ -1,6 +1,6 @@
 from django.urls import path
 from django.urls.conf import include
-from .views import ChangePasswordView, GetUsersDetail, RegisterUser, GetUsersList, check_user_existence
+from .views import ChangePasswordView, GetUsersDetail, RegisterUser, GetUsersList, StaffScheduleView, check_user_existence
 # from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework_jwt.views import ObtainJSONWebToken, VerifyJSONWebToken
 
@@ -12,6 +12,7 @@ urlpatterns = [
     path('<int:pk>/', GetUsersDetail.as_view()), #GET, PUT
     path('exists/', check_user_existence),
     path('changepassword/<int:pk>/', ChangePasswordView.as_view()), #PUT
+    path('schedule/', StaffScheduleView.as_view()) # GET
 
 
 ]
