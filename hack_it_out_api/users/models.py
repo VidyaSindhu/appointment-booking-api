@@ -27,12 +27,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 class StaffSchedule(models.Model):
-    doctor = models.ForeignKey(User, on_delete=CASCADE)
+    from services.models import Service
+    doctor = models.OneToOneField(User, on_delete=CASCADE)
     user_from = models.TimeField()
     user_to = models.TimeField()
-    # specialist_of = models.CharField(max_length=255)
-    try:
-        from services.models import Service
-    except ImportError:
-        pass
     specialist_of = models.ForeignKey(Service, on_delete=CASCADE, related_name="speicialists")

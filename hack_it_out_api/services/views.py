@@ -1,8 +1,10 @@
+# from _typeshed import Self
 from functools import partial, partialmethod
 from django.shortcuts import render
+from rest_framework.response import Response
 from rest_framework.serializers import Serializer
 from rest_framework.views import APIView
-from .serializers import AppointmentSerializer, GetAppointmentSerializer, GetServicessSerializer
+from .serializers import AppointmentSerializer, GetAppointmentSerializer, GetServicessSerializer, GetServiceSpecialistsSerializer
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
 from .models import Service, Appointment
 from rest_framework.permissions import IsAuthenticated
@@ -17,8 +19,22 @@ class GetServiceView(ListAPIView):
     serializer_class = GetServicessSerializer
     APIView = ['GET']
 
+class GetServiceSpeicialistsView(RetrieveAPIView):
+    queryset = Service.objects.all()
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JSONWebTokenAuthentication,]
+    serializer_class = GetServiceSpecialistsSerializer
+    APIView = ['GET']
+
+    def get(self, request, *args, **kwargs):
+        # service = Service.objects.get(pk=self.kwargs['pk'])
+        self.queryset = Service.objects.get(pk=kwargs["pk"])
+        # self.queryset = service.speicialists.all()
+        print(self.queryset)
+        return super().get(request, *args, **kwargs)
+
 class GetAppointmentDetailView(RetrieveAPIView):
-    queryset = Appointment.patient_appointments.all()
+    queryset = Appointment.objects.all()
     permission_classes = [IsAuthenticated]
     authentication_classes = [JSONWebTokenAuthentication,]
     serializer_class = GetAppointmentSerializer
@@ -32,7 +48,7 @@ class GetAppointmentsView(ListAPIView):
     APIView = ['GET']
 
     def get(self, request, *args, **kwargs):
-        patient = User.objects.get(pk=self.kwargs['pk'])
+        patient = User.objects.get(pk=request.user.id)
         self.queryset = patient.patient_appointments.all()
         return super().get(request, *args, **kwargs)
 
@@ -44,10 +60,27 @@ class BookAppointmentView(CreateAPIView):
     serializer_class = AppointmentSerializer
     APIView = ['POST']
 
+    def create(self, request, *args, **kwargs):
+        request.data["patient"] = request.user.id
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response({"success":True}, status=201, headers=headers)
+
+
 class ModifyAppointmentView(UpdateAPIView):
     APIView = ['PATCH']
-    queryset = Appointment.objects.al()
+    queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer(partial=True)
     permission_classes = [IsAuthenticated]
     authentication_classes = [JSONWebTokenAuthentication,]
+
+    def update(self, request, *args, **kwargs):
+        pk = kwargs["pk"]
+        appointment = Appointment.objects.get(pk=pk)
+        appointment.status = request.data["status"]
+        appointment.save()
+
+        return Response({"success":True}, status=200)
 
