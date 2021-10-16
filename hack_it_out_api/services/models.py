@@ -10,8 +10,8 @@ class Service(models.Model):
     duration = models.PositiveIntegerField()
 
 class Appointment(models.Model):
-    user = models.ForeignKey(User, on_delete=CASCADE)
-    doctor = models.ForeignKey(User, on_delete=CASCADE, related_name="doctor")
+    patient = models.ForeignKey(User, on_delete=CASCADE, related_name="patient_appointments")
+    doctor = models.ForeignKey(User, on_delete=CASCADE, related_name="doctor_appointments")
     appointment_on = models.DateTimeField()
     status = models.CharField(default="pending", max_length=255)
     service = models.ForeignKey(Service, on_delete=CASCADE)
