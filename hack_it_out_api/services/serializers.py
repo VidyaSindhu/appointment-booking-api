@@ -8,6 +8,12 @@ class GetServicessSerializer(ModelSerializer):
         model = Service
         fields = ('id', 'name', 'price', 'duration')
 
+class GetServiceSpecialistsSerializer(ModelSerializer):
+    class Meta:
+        model = Service
+        # fields = ("name", "user_name", "")
+        field = ('__all__')
+
 class AppointmentSerializer(ModelSerializer):
     status = serializers.CharField(required=False)
     class Meta:

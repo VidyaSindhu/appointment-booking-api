@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models.deletion import CASCADE
 from django.db.models.fields import DurationField
-from users.models import User
+
 # Create your models here.
 
 class Service(models.Model):
@@ -10,6 +10,7 @@ class Service(models.Model):
     duration = models.PositiveIntegerField()
 
 class Appointment(models.Model):
+    from users.models import User
     patient = models.ForeignKey(User, on_delete=CASCADE, related_name="patient_appointments")
     doctor = models.ForeignKey(User, on_delete=CASCADE, related_name="doctor_appointments")
     appointment_on = models.DateTimeField()

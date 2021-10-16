@@ -6,7 +6,7 @@ from django.db.models.fields import TimeField
 from django.utils.translation import ugettext_lazy as _
 
 from .managers import CustomUserManager
-
+# from services.models import Service
 
 class User(AbstractBaseUser, PermissionsMixin):
     # username = None
@@ -30,4 +30,9 @@ class StaffSchedule(models.Model):
     doctor = models.ForeignKey(User, on_delete=CASCADE)
     user_from = models.TimeField()
     user_to = models.TimeField()
-    specialist_of = models.CharField(max_length=255)
+    # specialist_of = models.CharField(max_length=255)
+    try:
+        from services.models import Service
+    except ImportError:
+        pass
+    specialist_of = models.ForeignKey(Service, on_delete=CASCADE, related_name="speicialists")
