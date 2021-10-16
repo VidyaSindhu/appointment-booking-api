@@ -30,3 +30,4 @@ class StaffSchedule(models.Model):
     user = models.ForeignKey(User, on_delete=CASCADE)
     user_from = models.TimeField()
     user_to = models.TimeField()
+    specialist = models.CharField(max_length=255)
