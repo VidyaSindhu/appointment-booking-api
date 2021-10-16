@@ -12,3 +12,4 @@ class BookAppointmentSerializer(ModelSerializer):
     class Meta:
         model = Appointment
         fields = ('user_id', 'doctor', 'appointment_on', 'service_id', 'description')
+
