@@ -6,7 +6,7 @@ from .views import BookAppointmentView, GetAppointmentDetailView, GetAppointment
 
 urlpatterns = [
     path('', GetServiceView.as_view()), #GET
-    path('<int:pk>/', GetServiceSpeicialistsView.as_view()), #GET
+    path('<pk>/', GetServiceSpeicialistsView.as_view()), #GET
     path('appointment/book/', BookAppointmentView.as_view()), #POST
     path('appointment/update/<int:pk>/', ModifyAppointmentView.as_view()), #PATCH, DELETE
     path('appointment/all', GetAppointmentsView.as_view()), #GET

@@ -4,12 +4,14 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer
 from rest_framework.views import APIView
+
+from users.serializers import GetDoctorsSerializer
 from .serializers import AppointmentSerializer, GetAppointmentSerializer, GetServicessSerializer, GetServiceSpecialistsSerializer
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
 from .models import Service, Appointment
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
-from users.models import User
+from users.models import StaffSchedule, User
 # Create your views here.
 
 class GetServiceView(ListAPIView):
@@ -19,19 +21,21 @@ class GetServiceView(ListAPIView):
     serializer_class = GetServicessSerializer
     APIView = ['GET']
 
+
+
 class GetServiceSpeicialistsView(RetrieveAPIView):
     queryset = Service.objects.all()
     permission_classes = [IsAuthenticated]
     authentication_classes = [JSONWebTokenAuthentication,]
     serializer_class = GetServiceSpecialistsSerializer
     APIView = ['GET']
+    # look_field = "specialists"
 
-    def get(self, request, *args, **kwargs):
-        # service = Service.objects.get(pk=self.kwargs['pk'])
-        self.queryset = Service.objects.get(pk=kwargs["pk"])
-        # self.queryset = service.speicialists.all()
-        print(self.queryset)
-        return super().get(request, *args, **kwargs)
+    # def get(self, request, *args, **kwargs):
+    #     service = Service.objects.get(pk=kwargs["pk"])
+    #     self.queryset = StaffSchedule.objects.filter(specialist_of=service)
+    #     print(self.queryset)
+    #     return super().get(request, *args, **kwargs)
 
 class GetAppointmentDetailView(RetrieveAPIView):
     queryset = Appointment.objects.all()

@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.serializers import HyperlinkedModelSerializer, ModelSerializer
 from .models import StaffSchedule, User
@@ -59,13 +60,14 @@ class GetSchedule(ModelSerializer):
         fields = ('id', 'name', "user_from", "user_to")
 
 class GetDoctorsSerializer(ModelSerializer):
+    doctor_id = serializers.IntegerField(source="doctor.id", read_only=True)
     doctor_name = serializers.CharField(source="doctor.name", read_only=True)
     user_from = serializers.TimeField(format="%I %p")
     user_to = serializers.TimeField(format="%I %p")
 
     class Meta:
         model = StaffSchedule
-        fields = ('doctor_name', 'user_from', 'user_to')
+        fields = ('id','doctor_id', 'doctor_name', 'user_from', 'user_to')
 
         
     
