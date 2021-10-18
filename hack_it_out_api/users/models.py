@@ -1,7 +1,6 @@
 from django.contrib.auth.models import AbstractUser, AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.db.models.deletion import CASCADE
-from django.db.models.fields import TimeField
 from django.utils.translation import ugettext_lazy as _
 
 from .managers import CustomUserManager
