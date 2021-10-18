@@ -1,11 +1,5 @@
-# from _typeshed import Self
-from functools import partial, partialmethod
-from django.shortcuts import render
 from rest_framework.response import Response
-from rest_framework.serializers import Serializer
-from rest_framework.views import APIView
 
-from users.serializers import GetDoctorsSerializer
 from .serializers import AppointmentSerializer, GetAppointmentSerializer, GetServicessSerializer, GetServiceSpecialistsSerializer
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
 from .models import Service, Appointment
@@ -21,22 +15,13 @@ class GetServiceView(ListAPIView):
     serializer_class = GetServicessSerializer
     APIView = ['GET']
 
-
-
 class GetServiceSpeicialistsView(RetrieveAPIView):
     queryset = Service.objects.all()
     permission_classes = [IsAuthenticated]
     authentication_classes = [JSONWebTokenAuthentication,]
     serializer_class = GetServiceSpecialistsSerializer
     APIView = ['GET']
-    # look_field = "specialists"
-
-    # def get(self, request, *args, **kwargs):
-    #     service = Service.objects.get(pk=kwargs["pk"])
-    #     self.queryset = StaffSchedule.objects.filter(specialist_of=service)
-    #     print(self.queryset)
-    #     return super().get(request, *args, **kwargs)
-
+    
 class GetAppointmentDetailView(RetrieveAPIView):
     queryset = Appointment.objects.all()
     permission_classes = [IsAuthenticated]
